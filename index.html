@@ -2,15 +2,74 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Бауманка</title>
+        <title>JustLife</title>
         <link rel="stylesheet" type="text/css" href="style.css">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bungee+Outline&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Jura:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     </head>
     <body>
-    <div id="container">
-        <h1>Преподы vs студенты</h1>
-        
+    <div class="container">
+        <div class="fieldset">
+            <div class="logo">
+                <img src="icons8-predator.svg">
+            </div>
+            <form>
+                <p>
+                    Размер поля по горизонтали:
+                    <input class="fields" type="number" value="8">
+                </p>
+                <p>
+                    Размер поля по вертикали:
+                    <input class="fields" type="number" value="8">
+                </p>
+                <p>
+                    Количество хищников:
+                    <input class="fields" type="number" value="10">
+                </p>
+                <p>
+                    Количество травоядных:
+                    <input class="fields" type="number" value="5">
+                </p>
+                <button class="buttons" id="render">Отобразить поле</button>
+                <p>
+                    Время жизни хищников:
+                <input class="fields" type="number" value="3">
+                </p>
+                <p>
+                    Время жизни травоядных:
+                <input class="fields" type="number" value="12">
+                </p>
+                <p>
+                    Рождаемость хищников:
+                <input class="fields" type="number" value="5">
+                </p>
+                <p>
+                    Рождаемость травоядных:
+                <input class="fields" type="number" value="7">
+                </p>
+                <button class="buttons" id="start"><div class="triangle-right"></div>Старт/Продолжить</button>
+                <div class="breakpoints">
+                    <button class="buttons" id="pause">
+                        <div class="pause-icon">
+                            <div class="pause"></div>
+                            <div class="pause"></div>
+                        </div>
+                            Пауза
+                    </button>
+                    <button class="buttons" id="stop">
+                        <div class="stop-icon">
+                        </div>
+                            Стоп
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div id="playground">
+
+        </div>
     </div>
     <script src="script.js"></script>
     </body>
