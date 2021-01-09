@@ -14,10 +14,11 @@ body {
     min-height: 100vh;
     margin-left: 75px;
     box-shadow: 0px 3px 10px 10px rgba(0, 0, 0, 0.397);
+    display: flex;
 }
 .fieldset {
     width: max-content;
-    height: 100vh;
+    height: 969px;
     border: 32px solid #2B8C7E;
 }
 form{
@@ -25,7 +26,7 @@ form{
     padding-top: 0px;
     width:400px;
 }
-img {
+.logopic {
     width: auto;
     height: 150px;
     border: 5px solid #02C2A5;  
@@ -75,6 +76,8 @@ p {
 }
 .buttons:focus {
     outline: none;
+}
+.buttons:active {
     box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.397);
 }
 .triangle-right {
@@ -118,4 +121,47 @@ p {
     width: 320px;
     height: 70px;
 }
+/* игровое поле */
 
+.pgField {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.message {
+    display: flex;
+    align-items: center;
+    width: 700px;
+    opacity: 0.4;
+}
+.message img {
+    width: 75px;
+    height: auto;
+}
+.message p {
+    color: black;
+    margin-top: 0px;
+    width: inherit;
+}
+.square {
+    width: 25px;
+    height: 25px;
+    background-color: white;
+    border: 1px solid black;
+}
+.prey {
+    background-color: #289948;
+}
+.predator {
+    background-color: #BF2828;
+}
+.playground {
+    display: flex;
+    flex-wrap: wrap;
+    background: white;
+    box-shadow: 0px 0px 50px 10px rgba(0, 0, 0, 0.397);
+}
+.hidden {
+    display: none;
+}

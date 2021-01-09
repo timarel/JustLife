@@ -14,41 +14,41 @@
     <div class="container">
         <div class="fieldset">
             <div class="logo">
-                <img src="icons8-predator.svg">
+                <img class="logopic" src="icons8-predator.svg">
             </div>
             <form>
                 <p>
                     Размер поля по горизонтали:
-                    <input class="fields" type="number" value="8">
+                    <input class="fields" type="number" value="20" id="column">
                 </p>
                 <p>
                     Размер поля по вертикали:
-                    <input class="fields" type="number" value="8">
+                    <input class="fields" type="number" value="20" id="row">
                 </p>
                 <p>
                     Количество хищников:
-                    <input class="fields" type="number" value="10">
+                    <input class="fields" type="number" value="80" id="predatorAmnt">
                 </p>
                 <p>
                     Количество травоядных:
-                    <input class="fields" type="number" value="5">
+                    <input class="fields" type="number" value="170" id="preyAmnt">
                 </p>
                 <button class="buttons" id="render">Отобразить поле</button>
                 <p>
                     Время жизни хищников:
-                <input class="fields" type="number" value="3">
+                <input class="fields" type="number" value="3" id="predatorLfTime">
                 </p>
                 <p>
                     Время жизни травоядных:
-                <input class="fields" type="number" value="12">
+                <input class="fields" type="number" value="12" id="preyLfTime">
                 </p>
                 <p>
                     Рождаемость хищников:
-                <input class="fields" type="number" value="5">
+                <input class="fields" type="number" value="5" id="predatorRate">
                 </p>
                 <p>
                     Рождаемость травоядных:
-                <input class="fields" type="number" value="7">
+                <input class="fields" type="number" value="7" id="preyRate">
                 </p>
                 <button class="buttons" id="start"><div class="triangle-right"></div>Старт/Продолжить</button>
                 <div class="breakpoints">
@@ -67,9 +67,15 @@
                 </div>
             </form>
         </div>
-        <div id="playground">
-
-        </div>
+        <div class="pgField">
+                <div class="message">
+                <img src="icons8-important-note-160.png">
+                <p>
+                    Игра хищники и травоядные. Для начала игры заполните форму и нажмите "Старт". Чтобы предварительно увидеть поле можете нажать кнопку "Отобразить поле".
+                </p>
+                </div>
+                <div class="playground"></div>
+            </div>
     </div>
     <script src="script.js"></script>
     </body>
