@@ -1,5 +1,6 @@
 class LifeGame {
     constructor() {
+        this.game = null;
         this.sqPg = null;
         this.columnAmnt = null;
         this.rowAmnt = null;
@@ -38,6 +39,7 @@ class LifeGame {
         this.startButton.addEventListener('click', (e) => {
             e.preventDefault();
             this.message.classList.add('hidden');
+            this.playGround.classList.remove('hidden');
             this.columnAmnt = document.getElementById("column").value;
             this.rowAmnt = document.getElementById("row").value;
             this.predatorAmnt = document.getElementById("predatorAmnt").value;
@@ -56,6 +58,7 @@ class LifeGame {
         this.renderButton.addEventListener('click', (e) => {
             e.preventDefault();
             this.message.classList.add('hidden');
+            this.playGround.classList.remove('hidden');
             this.columnAmnt = document.getElementById("column").value;
             this.rowAmnt = document.getElementById("row").value;
             this.predatorAmnt = document.getElementById("predatorAmnt").value;
@@ -63,76 +66,200 @@ class LifeGame {
             this.playGround.innerHTML = '';
             this.renderPlayGround();
         });
-        this.pauseButton.addEventListener('click', () => {
-            this.start();
+        this.pauseButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearInterval(this.game) 
         });
-        this.stopButton.addEventListener('click', () => {
-            this.start();
+        this.stopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearInterval(this.game);
+            this.playGround.innerHTML = '';
+            this.playGround.classList.add('hidden');
+            this.message.classList.remove('hidden');
         });
     }
 
-    checkStats() {
-        let head = this.snake[0];
-        this.snake.forEach((part, index) => {
-            if (index > 1) {
-                if (part.row === head.row && part.column === head.column) {
-                    alert('U loose rofl');
-                    clearInterval(this.game);
-                }
-            }
-        })
-    }
 
     start() {
-        clearInterval(this.game);
-        this.snake = [];
-        this.game = null;
-        this.food = null;
-        this.initSnake();
-        this.renderSnake();
-        this.generateFood();
-
         this.game = setInterval(() => {
-            this.snake = this.snake.map((part, index) => {
-                if (index === 0) {
-                    let newPosition = {
-                        row: part.row,
-                        column: part.column
-                    }
-                    if (this.direction === 'left') {
-                        newPosition.column -= 1;
-                    } else if (this.direction === 'right') {
-                        newPosition.column += 1;
-                    } else if (this.direction === 'up') {
-                        newPosition.row -= 1;
-                    } else if (this.direction === 'down') {
-                        newPosition.row += 1;
-                    }
-
-                    if (newPosition.row > this.dimension - 1) {
-                        newPosition.row = 0;
-                    } else if (newPosition.row < 0) {
-                        newPosition.row = this.dimension - 1;
-                    }
-
-                    if (newPosition.column > this.dimension - 1) {
-                        newPosition.column = 0;
-                    } else if (newPosition.column < 0) {
-                        newPosition.column = this.dimension - 1;
-                    }
-
-                    return newPosition;
+            let pgCopy = this.playGround.querySelectorAll('.square');
+            let pg = this.playGround.children;
+            for (let i=0; i < this.sqPg ; i++) {
+                if(pgCopy[i].classList.contains('prey')) {
+                    let greenAmnt = this.checkPeaceful(i);
+                    let checkDie = true;
+                    if((greenAmnt==2)||(greenAmnt==3)) { checkDie = false }
+                    setTimeout(() => {
+                        if(checkDie) {
+                        pg[i].classList.remove('prey');
+                        }
+                    },this.preyLfTime)
+                } else if (pgCopy[i].classList.contains('predator')) {
+                    let redAmnt = this.checkPredator(i);
+                    let checkDie = true;
+                    if((redAmnt==2)||(redAmnt==3)) { checkDie = false }
+                    setTimeout(() => {
+                        if(checkDie) {
+                        pg[i].classList.remove('prey');
+                        }
+                    },this.predatorLfTime)
+                    this.predatorMove(i) 
                 } else {
-                    return this.snake[index - 1];
+                    let greenAmnt = this.checkPeaceful(i);
+                    let redAmnt = this.checkPredator(i);
+                    setTimeout(() => {
+                        if (greenAmnt == 3) {
+                            pg[i].classList.add('prey');
+                        }
+                    },this.preyRate)
+                    setTimeout(() => {
+                        if (redAmnt == 3) {
+                            pg[i].classList.add('predator');
+                        }
+                    },this.predatorRate)
                 }
-            })
-            if (this.food.row === this.snake[0].row && this.food.column === this.snake[0].column) {
-                this.snake.push(this.snake[this.snake.length - 1]);
-                this.generateFood();
             }
-            this.checkLoose();
-            this.renderSnake();
-        }, this.speed)
+        }, 250)
+    }
+
+    predatorMove(predNum) {
+        let sq = this.playGround.children[predNum];
+        let position = {
+            row: sq.getAttribute('row'),
+            column: sq.getAttribute('column')
+        }
+        let newPosition = {
+            row: (position.row)/1 + this.getRandomArbitrary(-1, 1),
+            column: (position.column)/1 + this.getRandomArbitrary(-1, 1)
+        }
+        if (newPosition.row > this.rowAmnt - 1) {
+            newPosition.row = 0;
+        } else if (newPosition.row < 0) {
+            newPosition.row = this.rowAmnt - 1;
+        }
+
+        if (newPosition.column > this.columnAmnt - 1) {
+            newPosition.column = 0;
+        } else if (newPosition.column < 0) {
+            newPosition.column = this.columnAmnt - 1;
+        }
+        document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1)}"]`).classList.remove('predator');
+        if(document.querySelector(`[row="${(newPosition.row/1)}"][column="${(newPosition.column/1)}"]`).classList.contains('prey')){
+            document.querySelector(`[row="${(newPosition.row/1)}"][column="${(newPosition.column/1)}"]`).classList.remove('prey');
+            document.querySelector(`[row="${(newPosition.row/1)}"][column="${(newPosition.column/1)}"]`).classList.add('predator');
+        } 
+        else if(document.querySelector(`[row="${(newPosition.row/1)}"][column="${(newPosition.column/1)}"]`).classList.contains('predator')){
+        }
+        else{
+            document.querySelector(`[row="${(newPosition.row/1)}"][column="${(newPosition.column/1)}"]`).classList.add('predator');
+        }
+    }
+
+    getRandomArbitrary(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    checkPeaceful(sqNum) {
+        let sq = this.playGround.children[sqNum];
+        let amount = 0;
+        let position = {
+            row: sq.getAttribute('row'),
+            column: sq.getAttribute('column')
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1) + 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1) + 1}"]`).classList.contains('prey')
+         ){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1) - 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1) - 1}"]`).classList.contains('prey')
+         ){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1) - 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1) - 1}"]`).classList.contains('prey')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1) + 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1) + 1}"]`).classList.contains('prey')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1)}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1)}"]`).classList.contains('prey')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1) + 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1) + 1}"]`).classList.contains('prey')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1)}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1)}"]`).classList.contains('prey')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1) - 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1) - 1}"]`).classList.contains('prey')){
+            amount += 1;
+        }
+        return amount
+    }
+    checkPredator(sqNum) {
+        let sq = this.playGround.children[sqNum];
+        let amount = 0;
+        let position = {
+            row: sq.getAttribute('row'),
+            column: sq.getAttribute('column')
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1) + 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1) + 1}"]`).classList.contains('predator')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1) - 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1) - 1}"]`).classList.contains('predator')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1) - 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1) - 1}"]`).classList.contains('predator')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1) + 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1) + 1}"]`).classList.contains('predator')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1)}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) + 1}"][column="${(position.column/1)}"]`).classList.contains('predator')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1) + 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1) + 1}"]`).classList.contains('predator')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1)}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1) - 1}"][column="${(position.column/1)}"]`).classList.contains('predator')){
+            amount += 1;
+        }
+        if( 
+            document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1) - 1}"]`) != null &&
+            document.querySelector(`[row="${(position.row/1)}"][column="${(position.column/1) - 1}"]`).classList.contains('predator')){
+            amount += 1;
+        }
+        return amount
     }
 
     renderPlayers() {
@@ -168,13 +295,6 @@ class LifeGame {
         let checkPredators = player.classList.contains('prey');
         var result = checkHerbs || checkPredators;
         return result;
-    }
-
-    initSnake() {
-        this.snake.push({
-            row: Math.floor(this.dimension / 2),
-            column: Math.floor(this.dimension / 2)
-        })
     }
 }
 

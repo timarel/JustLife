@@ -19,36 +19,36 @@
             <form>
                 <p>
                     Размер поля по горизонтали:
-                    <input class="fields" type="number" value="20" id="column">
+                    <input class="fields" type="number" value="20" id="column" min="10">
                 </p>
                 <p>
                     Размер поля по вертикали:
-                    <input class="fields" type="number" value="20" id="row">
+                    <input class="fields" type="number" value="20" id="row" min="10">
                 </p>
                 <p>
                     Количество хищников:
-                    <input class="fields" type="number" value="80" id="predatorAmnt">
+                    <input class="fields" type="number" value="80" id="predatorAmnt" min="0">
                 </p>
                 <p>
                     Количество травоядных:
-                    <input class="fields" type="number" value="170" id="preyAmnt">
+                    <input class="fields" type="number" value="170" id="preyAmnt" min="0">
                 </p>
                 <button class="buttons" id="render">Отобразить поле</button>
                 <p>
                     Время жизни хищников:
-                <input class="fields" type="number" value="3" id="predatorLfTime">
+                <input class="fields" type="number" value="7" id="predatorLfTime" min="1">
                 </p>
                 <p>
                     Время жизни травоядных:
-                <input class="fields" type="number" value="12" id="preyLfTime">
+                <input class="fields" type="number" value="12" id="preyLfTime" min="1">
                 </p>
                 <p>
                     Рождаемость хищников:
-                <input class="fields" type="number" value="5" id="predatorRate">
+                <input class="fields" type="number" value="8" id="predatorRate" min="1">
                 </p>
                 <p>
                     Рождаемость травоядных:
-                <input class="fields" type="number" value="7" id="preyRate">
+                <input class="fields" type="number" value="5" id="preyRate" min="1">
                 </p>
                 <button class="buttons" id="start"><div class="triangle-right"></div>Старт/Продолжить</button>
                 <div class="breakpoints">
